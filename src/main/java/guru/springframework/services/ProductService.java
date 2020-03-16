@@ -7,13 +7,7 @@ import java.util.List;
 /**
  * Created by jt on 11/6/15.
  */
-public interface ProductService {
+public interface ProductService extends CRUDService<Product> {
 
-    List<Product> listAllProducts();
 
-    Product getProductById(Integer id);
-
-    Product saveOrUpdateProduct(Product product);
-
-    void deleteProduct(Integer id);
 }
