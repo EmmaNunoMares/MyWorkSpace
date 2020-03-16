@@ -1,4 +1,4 @@
-package guru.springframework.services;
+package guru.springframework.services.mapservices;
 
 import guru.springframework.domain.DomainObject;
 
@@ -7,12 +7,11 @@ import java.util.*;
 /**
  * Created by jt on 11/14/15.
  */
-public abstract class AbstractMapService {
+public abstract class AbstractMapService  {
     protected Map<Integer, DomainObject> domainMap;
 
     public AbstractMapService() {
         domainMap = new HashMap<>();
-        loadDomainObjects();
     }
 
     public List<DomainObject> listAll() {
@@ -44,7 +43,5 @@ public abstract class AbstractMapService {
     private Integer getNextKey(){
         return Collections.max(domainMap.keySet()) + 1;
     }
-
-    protected abstract void loadDomainObjects();
 
 }
