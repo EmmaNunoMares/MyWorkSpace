@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 import java.util.List;
 
 /**
@@ -27,18 +28,21 @@ public class UserServiceJpaDaoImpl extends AbstractJpaDaoService implements User
     @Override
     public List<?> listAll() {
         EntityManager em = emf.createEntityManager();
-
-        return em.createQuery("from User", User.class).getResultList();
+        List<?> out = em.createQuery("from User", User.class).getResultList();
+        em.close();
+        return out;
     }
 
     @Override
     public User getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-
-        return em.find(User.class, id);
+        User out = em.find(User.class, id);
+        em.close();
+        return out;
     }
 
     @Override
+    @Transactional
     public User saveOrUpdate(User domainObject) {
         EntityManager em = emf.createEntityManager();
 
@@ -50,7 +54,7 @@ public class UserServiceJpaDaoImpl extends AbstractJpaDaoService implements User
 
         User saveduser = em.merge(domainObject);
         em.getTransaction().commit();
-
+        em.close();
         return saveduser;
     }
 
@@ -61,5 +65,6 @@ public class UserServiceJpaDaoImpl extends AbstractJpaDaoService implements User
         em.getTransaction().begin();
         em.remove(em.find(User.class, id));
         em.getTransaction().commit();
+        em.close();
     }
 }

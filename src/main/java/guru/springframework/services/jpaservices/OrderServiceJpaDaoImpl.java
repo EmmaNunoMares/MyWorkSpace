@@ -18,15 +18,17 @@ public class OrderServiceJpaDaoImpl extends AbstractJpaDaoService implements Ord
     @Override
     public List<Order> listAll() {
         EntityManager em = emf.createEntityManager();
-
-        return em.createQuery("from Order", Order.class).getResultList();
+        List<Order> out = em.createQuery("from Order", Order.class).getResultList();
+        em.close();
+        return out;
     }
 
     @Override
     public Order getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-
-        return em.find(Order.class, id);
+        Order out = em.find(Order.class, id);
+        em.close();
+        return out;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class OrderServiceJpaDaoImpl extends AbstractJpaDaoService implements Ord
         em.getTransaction().begin();
         Order savedProduct = em.merge(domainObject);
         em.getTransaction().commit();
-
+        em.close();
         return savedProduct;
     }
 
@@ -47,5 +49,6 @@ public class OrderServiceJpaDaoImpl extends AbstractJpaDaoService implements Ord
         em.getTransaction().begin();
         em.remove(em.find(Order.class, id));
         em.getTransaction().commit();
+        em.close();
     }
 }

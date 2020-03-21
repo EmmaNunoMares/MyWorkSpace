@@ -18,15 +18,17 @@ public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements P
     @Override
     public List<Product> listAll() {
         EntityManager em = emf.createEntityManager();
-
-        return em.createQuery("from Product", Product.class).getResultList();
+        List<Product> out = em.createQuery("from Product", Product.class).getResultList();
+        em.close();
+        return out;
     }
 
     @Override
     public Product getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-
-        return em.find(Product.class, id);
+        Product out = em.find(Product.class, id);
+        em.close();
+        return out;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements P
         em.getTransaction().begin();
         Product savedProduct = em.merge(domainObject);
         em.getTransaction().commit();
-
+        em.close();
         return savedProduct;
     }
 
@@ -47,5 +49,6 @@ public class ProductServiceJpaDaoImpl extends AbstractJpaDaoService implements P
         em.getTransaction().begin();
         em.remove(em.find(Product.class, id));
         em.getTransaction().commit();
+        em.close();
     }
 }

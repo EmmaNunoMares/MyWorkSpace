@@ -27,15 +27,17 @@ public class CustomerServiceJPADaoImpl extends AbstractJpaDaoService implements 
     @Override
     public List<Customer> listAll() {
         EntityManager em = emf.createEntityManager();
-
-        return em.createQuery("from Customer", Customer.class).getResultList();
+        List<Customer> out = em.createQuery("from Customer", Customer.class).getResultList();
+        em.close();
+        return out;
     }
 
     @Override
     public Customer getById(Integer id) {
         EntityManager em = emf.createEntityManager();
-
-        return em.find(Customer.class, id);
+        Customer out = em.find(Customer.class, id);
+        em.close();
+        return out;
     }
 
     @Override
@@ -51,7 +53,7 @@ public class CustomerServiceJPADaoImpl extends AbstractJpaDaoService implements 
 
         Customer savedCustomer = em.merge(domainObject);
         em.getTransaction().commit();
-
+        em.close();
         return savedCustomer;
     }
 
@@ -62,5 +64,6 @@ public class CustomerServiceJPADaoImpl extends AbstractJpaDaoService implements 
         em.getTransaction().begin();
         em.remove(em.find(Customer.class, id));
         em.getTransaction().commit();
+        em.close();
     }
 }

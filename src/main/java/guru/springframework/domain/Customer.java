@@ -1,9 +1,6 @@
 package guru.springframework.domain;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  * Created by jt on 11/14/15.
@@ -17,9 +14,23 @@ public class Customer extends AbstractDomainClass {
     private String phoneNumber;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "addressLine1", column = @Column(name = "billingal1")),
+            @AttributeOverride(name = "addressLine2", column = @Column(name = "billingal2")),
+            @AttributeOverride(name = "city", column = @Column(name = "billingCity")),
+            @AttributeOverride(name = "state", column = @Column(name = "billingState")),
+            @AttributeOverride(name = "zipCode", column = @Column(name = "billingZipCode"))
+    })
     private Address billingAddress;
 
     @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "addressLine1", column = @Column(name = "shipping1")),
+            @AttributeOverride(name = "addressLine2", column = @Column(name = "shipping2")),
+            @AttributeOverride(name = "city", column = @Column(name = "shippingcity")),
+            @AttributeOverride(name = "state", column = @Column(name = "shippingState")),
+            @AttributeOverride(name = "zipCode", column = @Column(name = "shippingZip"))
+    })
     private Address shippingAddress;
 
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
